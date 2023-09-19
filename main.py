@@ -3,9 +3,9 @@ from phonenumbers import parse, format_number, PhoneNumberFormat
 
 
 # прочитали из файла
-wb = load_workbook('usersdescM.xlsx')
-ws = wb.get_sheet_by_name('usersdescM')
-col = ws['C']
+wb = load_workbook("usersdescM.xlsx")
+ws = wb.get_sheet_by_name("usersdescM")
+col = ws["C"]
 
 # получили все телефоны
 phones_list = []
@@ -17,14 +17,15 @@ def normalize_number(num: str):
     number = parse(num, "RU")
     return format_number(number, PhoneNumberFormat.E164)
 
+
 # нормализовали значения
 norm_list = []
 
 for num in phones_list:
     if num != None:
-      norm_list.append(normalize_number(str(num)))   
+        norm_list.append(normalize_number(str(num)))
     if num == None:
-      norm_list.append(num)
+        norm_list.append(num)
 
 valid_num = 0
 invalid_num = 0
@@ -43,16 +44,25 @@ for num in norm_list:
 # print(f'исходный список {len(phones_list)}, нормализованый список {len(norm_list)}')
 
 
-
-result = [] 
+result = []
 counter = 0
-# привели к одному виду 
+# привели к одному виду
 for num in norm_list:
     if num == None:
         result.append(num)
         continue
     if len(num) == 12:
-        valid = num[0:2] + '(' + num[2:5] + ')' + num[5:8] + '-' + num[8:10] + '-' + num[10:12]
+        valid = (
+            num[0:2]
+            + "("
+            + num[2:5]
+            + ")"
+            + num[5:8]
+            + "-"
+            + num[8:10]
+            + "-"
+            + num[10:12]
+        )
         result.append(valid)
         counter += 1
     if len(num) != 12:
@@ -63,10 +73,8 @@ wb1 = Workbook()
 ws1 = wb1.active
 
 
-
 for i, num in enumerate(result):
-    ws1[f'A{i+1}'] = num
+    ws1[f"A{i+1}"] = num
 
 
-
-wb1.save('phones.xlsx')
+wb1.save("phones.xlsx")
